@@ -1,5 +1,6 @@
 // index.js
-import "./styles.css";
-import { greeting } from "./greeting.js";
+import "./view/styles.css";
+import Controller from "./controller/controller.js"
 
-console.log(greeting);
+const controller = new Controller();
+controller.controllerInit();
