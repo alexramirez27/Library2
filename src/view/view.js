@@ -64,7 +64,7 @@ class View {
         activateRemoveButton(removeBtn);
     }
 
-    displayTableBody(library) {
+    displayTableBody(library, saveToLocalStorage) {
         const tbody = document.querySelector('tbody');
         tbody.textContent = '';
 
@@ -86,13 +86,9 @@ class View {
             const readBtn = document.createElement('button');
             readBtn.textContent = book.read ? 'Yes' : 'No';
             readBtn.addEventListener('click', () => {
-                if (readBtn.textContent === 'Yes') {
-                    readBtn.textContent = 'No';
-                    book.read = false;
-                } else {
-                    readBtn.textContent = 'Yes';
-                    book.read = true;
-                }
+                book.read = !book.read;
+                readBtn.textContent = book.read ? "Yes" : "No";
+                saveToLocalStorage();
             });
 
             tdRead.appendChild(readBtn);
@@ -104,7 +100,8 @@ class View {
             removeBtn.addEventListener('click', () => {
                 library.removeBookFromLibrary(book);
                 library.removeMapItem(book.title);
-                this.displayTableBody(library);
+                saveToLocalStorage();
+                this.displayTableBody(library, saveToLocalStorage);
             });
 
             tdRemove.appendChild(removeBtn)

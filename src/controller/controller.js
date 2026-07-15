@@ -45,20 +45,20 @@ class Controller {
             this.#library.addMapItem(titleInput, authorInput);
 
             // Save to local storage
-            this.saveToLocalStorage();
+            this.#saveToLocalStorage();
 
             form.reset();
             dialog.close();
 
-            this.#view.displayTableBody(this.#library);
+            this.#view.displayTableBody(this.#library, this.#saveToLocalStorage.bind(this));
         });
     }
 
-    saveToLocalStorage() {
+    #saveToLocalStorage() {
         localStorage.setItem("library", JSON.stringify(this.#library));
     }
 
-    loadFromLocalStorage() {
+    #loadFromLocalStorage() {
         const savedLibrary = localStorage.getItem("library");
 
         if (!savedLibrary) return;
@@ -68,12 +68,12 @@ class Controller {
     }
 
     controllerInit() {
-        this.loadFromLocalStorage();
+        this.#loadFromLocalStorage();
 
         const view = new View();
         view.viewInit();
 
-        view.displayTableBody(this.#library);
+        view.displayTableBody(this.#library, this.#saveToLocalStorage.bind(this));
 
         this.#createBookFromDialog();
     }
