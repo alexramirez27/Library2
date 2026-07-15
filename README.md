@@ -1,1 +1,1 @@
-Webpack template for future repositories.
+A web app that represents a digital library where you can add and remove book entries.
