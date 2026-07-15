@@ -82,7 +82,20 @@ class View {
             tdPages.textContent = book.pages;
 
             const tdRead = document.createElement('td');
-            tdRead.textContent = book.read ? 'Yes' : 'No';
+
+            const readBtn = document.createElement('button');
+            readBtn.textContent = book.read ? 'Yes' : 'No';
+            readBtn.addEventListener('click', () => {
+                if (readBtn.textContent === 'Yes') {
+                    readBtn.textContent = 'No';
+                    book.read = false;
+                } else {
+                    readBtn.textContent = 'Yes';
+                    book.read = true;
+                }
+            });
+
+            tdRead.appendChild(readBtn);
 
             const tdRemove = document.createElement('td');
             const removeBtn = document.createElement('button');

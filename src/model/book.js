@@ -57,6 +57,27 @@ class Book {
             return `${this.title} by ${this.author}, ${this.pages} pages, not read yet`;
         }
     };
+
+    toJSON() {
+        return {
+            id: this.#id,
+            title: this.#title,
+            author: this.#author,
+            pages: this.#pages,
+            read: this.#read
+        };
+    }
+
+    static fromJSON(data) {
+        const book = new Book(
+            data.title,
+            data.author,
+            data.pages,
+            data.read
+        );
+        book.#id = data.id;
+        return book;
+    }
 }
 
 export default Book;

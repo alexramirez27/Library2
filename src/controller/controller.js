@@ -24,7 +24,7 @@ class Controller {
             const pagesInput = Number(document.querySelector('#pages').value);
             const readInput = document.querySelector('input[name="read"]:checked')?.value;
 
-            if (this.#library.mapTitleAndAuthor.has(titleInput, authorInput)) {
+            if (this.#library.mapTitleAndAuthor.has(titleInput)) {
                 alert("Book already in the table!");
                 return;
             }
@@ -45,7 +45,7 @@ class Controller {
             this.#library.addMapItem(titleInput, authorInput);
 
             // Save to local storage
-            // this.saveToLocalStorage();
+            this.saveToLocalStorage();
 
             form.reset();
             dialog.close();
@@ -54,9 +54,26 @@ class Controller {
         });
     }
 
+    saveToLocalStorage() {
+        localStorage.setItem("library", JSON.stringify(this.#library));
+    }
+
+    loadFromLocalStorage() {
+        const savedLibrary = localStorage.getItem("library");
+
+        if (!savedLibrary) return;
+
+        const parsedLibrary = JSON.parse(savedLibrary);
+        this.#library = Library.fromJSON(parsedLibrary);
+    }
+
     controllerInit() {
+        this.loadFromLocalStorage();
+
         const view = new View();
         view.viewInit();
+
+        view.displayTableBody(this.#library);
 
         this.#createBookFromDialog();
     }

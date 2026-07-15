@@ -1,4 +1,5 @@
 // library.js
+import Book from "./book.js";
 
 class Library {
     #library = [];
@@ -31,6 +32,20 @@ class Library {
 
     removeMapItem(title) {
         this.#mapTitleAndAuthor.delete(title);
+    }
+
+    toJSON() {
+        return {
+            library: this.#library.map(book => book.toJSON()),
+            mapTitleAndAuthor: Array.from(this.#mapTitleAndAuthor)
+        };
+    }
+
+    static fromJSON(data) {
+        const library = new Library();
+        library.#library = data.library.map(bookData => Book.fromJSON(bookData));
+        library.#mapTitleAndAuthor = new Map(data.mapTitleAndAuthor);
+        return library;
     }
 }
 
