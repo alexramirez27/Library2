@@ -12,6 +12,30 @@ class Controller {
         this.#library = new Library();
     }
 
+    #addListenerToInput(input) {
+        let isValid = true;
+        input.addEventListener("input", () => {
+            const p = input.parentNode.parentNode.querySelector('p');
+            if (!input.checkValidity()) {
+                p.className = 'error';
+                isValid = false;
+            } else {
+                p.className = 'valid';
+            }
+        });
+        return isValid;
+    }
+
+    #checkInputValidity(input) {
+        let isValid = true;
+        if (!input.checkValidity()) {
+            const p = input.parentNode.parentNode.querySelector('p');
+            p.className = 'error';
+            isValid = false;
+        }
+        return isValid;
+    }
+
     #createBookFromDialog() {
         const dialog = document.querySelector("dialog");
         const form = dialog.querySelector("form");
@@ -19,37 +43,72 @@ class Controller {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            const titleInput = document.querySelector('#title').value;
-            const authorInput = document.querySelector('#author').value;
-            const pagesInput = Number(document.querySelector('#pages').value);
-            const readInput = document.querySelector('input[name="read"]:checked')?.value;
+            const titleInput = document.querySelector('#title');
+            const authorInput = document.querySelector('#author');
+            const pagesInput = document.querySelector('#pages');
+            const numPagesInput = Number(pagesInput.value);
+            const readInput = document.querySelector('input[name="read"]:checked');
 
-            if (this.#library.mapTitleAndAuthor.has(titleInput)) {
-                alert("Book already in the table!");
+            if (this.#library.mapTitleAndAuthor.has(titleInput.value)) {
+                alert("Book is already in the table!");
                 return;
             }
 
-            if (!readInput) {
-                alert("No read input entered!");
-                return;
+            // Constraint validation
+            let isValid = true;
+            isValid = this.#addListenerToInput(titleInput);
+            isValid = this.#addListenerToInput(authorInput);
+            isValid = this.#addListenerToInput(pagesInput);
+
+            const yesRadio = document.querySelector("#yes");
+            yesRadio.addEventListener("input", () => {
+                const divRead = document.querySelector('#div-read');
+                const p = divRead.parentNode.querySelector('p');
+                if (!yesRadio.checkValidity()) {
+                    p.className = 'error';
+                    isValid = false;
+                } else {
+                    p.className = 'valid';
+                }
+            });
+
+            const noRadio = document.querySelector("#no");
+            noRadio.addEventListener("input", () => {
+                const divRead = document.querySelector('#div-read');
+                const p = divRead.parentNode.querySelector('p');
+                if (!noRadio.checkValidity()) {
+                    p.className = 'error';
+                    isValid = false;
+                } else {
+                    p.className = 'valid';
+                }
+            });
+
+            isValid = this.#checkInputValidity(titleInput);
+            isValid = this.#checkInputValidity(authorInput);
+            isValid = this.#checkInputValidity(pagesInput);
+
+            if (!yesRadio.checkValidity()) {
+                const divRead = document.querySelector('#div-read');
+                const p = divRead.parentNode.querySelector('p');
+                p.className = 'error';
+                isValid = false;
             }
+            
+            if (!isValid) return;
 
             const book = new Book(
-                titleInput,
-                authorInput,
-                pagesInput,
-                readInput === "yes"
+                titleInput.value,
+                authorInput.value,
+                numPagesInput,
+                readInput.value === "yes"
             );
 
             this.#library.addBookToLibrary(book);
-            this.#library.addMapItem(titleInput, authorInput);
-
-            // Save to local storage
+            this.#library.addMapItem(titleInput.value, authorInput.value);
             this.#saveToLocalStorage();
-
             form.reset();
             dialog.close();
-
             this.#view.displayTableBody(this.#library, this.#saveToLocalStorage.bind(this));
         });
     }

@@ -1,9 +1,24 @@
 // view.js
 
 class View {
+    #cancelBtnListener() {
+        const dialog = document.querySelector('dialog');
+        const form = dialog.querySelector('form');
+        const cancelBtn = dialog.querySelector('.cancel-btn');
+
+        cancelBtn.addEventListener("click", () => {
+            form.reset();
+            dialog.close();
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => {
+                error.className = 'valid';
+            });
+        });
+    }
+
     #openModal() {
-        // Dialog
         const dialog = document.querySelector("dialog");
+        const form = dialog.querySelector('form');
         dialog.showModal();
 
         dialog.addEventListener("click", e => {
@@ -14,7 +29,12 @@ class View {
                 e.clientY < dialogDimensions.top ||
                 e.clientY > dialogDimensions.bottom
             ) {
+                form.reset();
                 dialog.close();
+                const errors = document.querySelectorAll('.error');
+                errors.forEach(error => {
+                    error.className = 'valid';
+                });
             }
         });
     }
@@ -112,21 +132,12 @@ class View {
     }
     
     viewInit() {
-        // Open modal
         const btnAddNewBook = document.querySelector("#btn-new-book");
         btnAddNewBook.addEventListener("click", () => {
             this.#openModal();
         }); 
 
-        // Click cancel
-        const dialog = document.querySelector('dialog');
-        const form = dialog.querySelector('form');
-        const cancelBtn = dialog.querySelector('.cancel-btn');
-
-        cancelBtn.addEventListener("click", () => {
-            form.reset();
-            dialog.close();
-        });
+        this.#cancelBtnListener();
     }
 }
 

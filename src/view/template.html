@@ -28,32 +28,44 @@
         </div>
         <button id="btn-new-book">New Book</button>
         <dialog>
-            <form method="dialog">
+            <form method="dialog" novalidate>
                 <h1>Add Book</h1>
                 <div>
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required>
+                    <div class="input-container">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <p class="valid">The title must be filled!</p>
                 </div>
                 <div>
-                    <label for="author">Author:</label>
-                    <input type="text" id="author" name="author" required>
+                    <div class="input-container">
+                        <label for="author">Author:</label>
+                        <input type="text" id="author" name="author" required>
+                    </div>
+                    <p class="valid">The author name must be filled!</p>
                 </div>
                 <div>
-                    <label for="title">Pages:</label>
-                    <input type="number" id="pages" name="pages" required>
+                    <div class="input-container">
+                        <label for="pages">Pages:</label>
+                        <input type="number" id="pages" name="pages" required>
+                    </div>
+                    <p class="valid">The number of pages must be filled!</p>
                 </div>
-                <div id="div-read">
-                    <label for="read">Read:</label>
-                    <div>
+                <div>
+                    <div id="div-read">
+                        <label for="read">Read:</label>
                         <div>
-                            <input type="radio" name="read" id="yes" value="yes">
-                            <label for="yes">Yes</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="read" id="no" value="no">
-                            <label for="no">No</label>
+                            <div>
+                                <input type="radio" name="read" id="yes" value="yes" required>
+                                <label for="yes">Yes</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="read" id="no" value="no">
+                                <label for="no">No</label>
+                            </div>
                         </div>
                     </div>
+                    <p class="valid">You must tick yes or no!</p>
                 </div>
                 <div class="dialog-btns">
                     <button type="button" class="cancel-btn dark-btn">Cancel</button>
